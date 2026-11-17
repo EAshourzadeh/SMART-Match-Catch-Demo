@@ -73,12 +73,12 @@
   }
   SSG.sfx = {
     tap() {
-      noise(0.05, 0.12);
-      beep(900, 0.07, { type: "square", slide: -600, vol: 0.06 });
+      beep(920, 0.045, { type: "sine", slide: 240, vol: 0.045 });
     },
     pop() {
-      noise(0.09, 0.25);
-      beep(560, 0.12, { type: "triangle", slide: -320, vol: 0.2 });
+      noise(0.025, 0.06);
+      beep(720, 0.07, { type: "sine", slide: 360, vol: 0.11 });
+      beep(1080, 0.04, { type: "triangle", slide: 160, delay: 0.025, vol: 0.055 });
     },
     good() {
       beep(660, 0.12, { type: "triangle" });
@@ -253,19 +253,26 @@
       for (let i = 0; i < n; i++) {
         const d = document.createElement("i"),
           a = Math.random() * Math.PI * 2,
-          dist = SSG.rand(40, 120),
-          s = SSG.rand(7, 15);
-        d.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:${Math.random() < 0.5 ? "50%" : "3px"};background:${SSG.pick(colors)}`;
+          dist = SSG.rand(36, 96),
+          s = SSG.rand(7, 16),
+          bubble = Math.random() < 0.72,
+          color = SSG.pick(colors);
+        d.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:${bubble ? "50%" : "4px"};background:${color};border:${bubble ? "2px solid rgba(255,255,255,.9)" : "0"};box-shadow:${bubble ? "inset 2px 2px 0 rgba(255,255,255,.45)" : "none"}`;
         fx.appendChild(d);
         d.animate(
           [
-            { transform: "translate(-50%,-50%) scale(1)", opacity: 1 },
+            { transform: "translate(-50%,-50%) scale(.35)", opacity: 0.9 },
             {
-              transform: `translate(${Math.cos(a) * dist}px,${Math.sin(a) * dist + 30}px) scale(.2) rotate(${SSG.rand(-200, 200)}deg)`,
+              transform: `translate(${Math.cos(a) * dist * 0.55}px,${Math.sin(a) * dist * 0.55 - 10}px) scale(1.15) rotate(${SSG.rand(-70, 70)}deg)`,
+              opacity: 1,
+              offset: 0.42,
+            },
+            {
+              transform: `translate(${Math.cos(a) * dist}px,${Math.sin(a) * dist - 28}px) scale(.55) rotate(${SSG.rand(-140, 140)}deg)`,
               opacity: 0,
             },
           ],
-          { duration: SSG.rand(450, 800), easing: "cubic-bezier(.2,.8,.3,1)" },
+          { duration: SSG.rand(560, 900), easing: "cubic-bezier(.2,.75,.3,1)" },
         ).onfinish = () => d.remove();
       }
     }
